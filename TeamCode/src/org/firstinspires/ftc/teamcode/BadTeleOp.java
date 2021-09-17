@@ -24,12 +24,21 @@ public class BadTeleOp extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+            double y = -gamepad1.left_stick_y  ;
+            double x = gamepad1.left_stick_x*1.1;
+            double rx = gamepad1.right_stick_x;
+            double denominator = Math.max(Math.abs(y)+Math.abs(x)+Math.abs(rx), 1);
 
+            double v1 = (y+x+rx)/denominator;
+            double v2 = (y-x-rx)/denominator;
+            double v3 = (y-x+rx)/denominator;
+            double v4 = (y+x-rx)/denominator;
 
             front_left_motor.setPower(v1);
             front_right_motor.setPower(v2);
             back_left_motor.setPower(v3);
             back_right_motor.setPower(v4);
+            addTelemetryData();
             telemetry.update();
         }
     }
@@ -39,7 +48,6 @@ public class BadTeleOp extends LinearOpMode {
         telemetry.addData("Front right power", round(front_right_motor.getPower()));
         telemetry.addData("Back left power", round(back_left_motor.getPower()));
         telemetry.addData("Back right power", round(back_right_motor.getPower()));
-        telemetry.addData("Accelerating", accelerating);
     }
 
     private void initializeIMU(){
